@@ -1,0 +1,236 @@
+# Entity: calculate
+
+main: kit: entity: calculate: {
+
+  alias: field: {}
+
+  fields: {
+    city: {
+      h: "City"
+      n: "city"
+      r: false
+      t: "`$STRING`"
+    }
+    disclaimer: {
+      h: "Disclaimer"
+      n: "disclaimer"
+      r: false
+      t: "`$STRING`"
+    }
+    federal: {
+      h: "Federal"
+      n: "federal"
+      r: false
+      t: "`$OBJECT`"
+    }
+    filingStatus: {
+      h: "Filing Status"
+      n: "filingStatus"
+      r: false
+      t: "`$STRING`"
+    }
+    income: {
+      h: "Income"
+      n: "income"
+      r: true
+      t: "`$NUMBER`"
+    }
+    input: {
+      h: "Input"
+      n: "input"
+      r: true
+      t: "`$OBJECT`"
+    }
+    local: {
+      h: "Local"
+      n: "local"
+      r: false
+      sh: "Present only where a county, city or school district levies its own."
+      t: [
+        "`$ONE`"
+        [
+          "`$OBJECT`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    preTaxDeductions: {
+      h: "Pre Tax Deductions"
+      n: "preTaxDeductions"
+      r: false
+      t: "`$NUMBER`"
+    }
+    selfEmploymentIncome: {
+      h: "Self Employment Income"
+      n: "selfEmploymentIncome"
+      r: false
+      t: "`$NUMBER`"
+    }
+    sources: {
+      h: "Sources"
+      n: "sources"
+      r: false
+      sh: "Where each layer of the calculation came from."
+      t: "`$OBJECT`"
+    }
+    state: {
+      h: "State"
+      n: "state"
+      r: false
+      t: [
+        "`$ONE`"
+        [
+          "`$OBJECT`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    taxYear: {
+      h: "Tax Year"
+      n: "taxYear"
+      r: false
+      t: "`$INTEGER`"
+    }
+    totals: {
+      h: "Totals"
+      n: "totals"
+      r: false
+      t: "`$OBJECT`"
+    }
+  }
+
+  name: "calculate"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "city"
+            "filingStatus"
+            "income"
+            "preTaxDeductions"
+            "selfEmploymentIncome"
+            "state"
+          ]
+          co: {
+            id: "POST /api/v1/calculate"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/api/v1/calculate"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "calculate"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /api/v1/calculate"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                k: "query"
+                n: "city"
+                or: "city"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "single"
+                k: "query"
+                n: "filing_status"
+                or: "filingStatus"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "income"
+                or: "income"
+                r: true
+                t: "`$NUMBER`"
+              }
+              {
+                ex: 0
+                k: "query"
+                n: "pre_tax_deduction"
+                or: "preTaxDeductions"
+                r: false
+                t: "`$NUMBER`"
+              }
+              {
+                ex: 0
+                k: "query"
+                n: "self_employment_income"
+                or: "selfEmploymentIncome"
+                r: false
+                t: "`$NUMBER`"
+              }
+              {
+                k: "query"
+                n: "state"
+                or: "state"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/api/v1/calculate"
+          q: {
+            exist: [
+              "income"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "calculate"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

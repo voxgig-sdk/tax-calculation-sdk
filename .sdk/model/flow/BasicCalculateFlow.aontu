@@ -1,0 +1,36 @@
+# BasicCalculateFlow
+
+main: kit: flow: BasicCalculateFlow:
+{
+  entity: "calculate",
+  kind: "basic",
+  name: "BasicCalculateFlow",
+  step: [
+    {
+      i: {
+        ref: "calculate_ref01"
+      }
+
+      o: "create"
+    }
+
+    {
+      i: {
+        ref: "calculate_ref01",
+        srcdatavar: "calculate_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-calculate_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicCalculateFlow"
+}

@@ -1,0 +1,85 @@
+{
+  "existing": {
+    "calculate": {
+      "CALCULATE00": {
+        "city": "s82",
+        "disclaimer": "s83",
+        "federal": {},
+        "filingStatus": "s85",
+        "income": 134,
+        "input": {},
+        "local": "s88",
+        "preTaxDeductions": 137,
+        "selfEmploymentIncome": 138,
+        "sources": {},
+        "state": "s8c",
+        "taxYear": 141,
+        "totals": {},
+        "id": "CALCULATE00"
+      },
+      "CALCULATE01": {
+        "city": "s104",
+        "disclaimer": "s105",
+        "federal": {},
+        "filingStatus": "s107",
+        "income": 264,
+        "input": {},
+        "local": "s10a",
+        "preTaxDeductions": 267,
+        "selfEmploymentIncome": 268,
+        "sources": {},
+        "state": "s10e",
+        "taxYear": 271,
+        "totals": {},
+        "id": "CALCULATE01"
+      },
+      "CALCULATE02": {
+        "city": "s186",
+        "disclaimer": "s187",
+        "federal": {},
+        "filingStatus": "s189",
+        "income": 394,
+        "input": {},
+        "local": "s18c",
+        "preTaxDeductions": 397,
+        "selfEmploymentIncome": 398,
+        "sources": {},
+        "state": "s190",
+        "taxYear": 401,
+        "totals": {},
+        "id": "CALCULATE02"
+      }
+    }
+  },
+  "new": {
+    "calculate": {
+      "calculate_ref01": {
+        "city": "s208",
+        "disclaimer": "s209",
+        "federal": {},
+        "filingStatus": "s20b",
+        "income": 524,
+        "input": {},
+        "local": "s20e",
+        "preTaxDeductions": 527,
+        "selfEmploymentIncome": 528,
+        "sources": {},
+        "state": "s212",
+        "taxYear": 531,
+        "totals": {}
+      }
+    }
+  },
+  "requests": {
+    "POST /api/v1/calculate": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /api/v1/calculate": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

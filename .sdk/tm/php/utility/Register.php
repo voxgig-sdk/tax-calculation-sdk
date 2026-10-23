@@ -1,0 +1,72 @@
+<?php
+declare(strict_types=1);
+
+// TaxCalculation SDK utility registration
+
+require_once __DIR__ . '/../core/UtilityType.php';
+require_once __DIR__ . '/Clean.php';
+require_once __DIR__ . '/Done.php';
+require_once __DIR__ . '/MakeError.php';
+require_once __DIR__ . '/FeatureAdd.php';
+require_once __DIR__ . '/FeatureHook.php';
+require_once __DIR__ . '/FeatureInit.php';
+require_once __DIR__ . '/Fetcher.php';
+require_once __DIR__ . '/MakeFetchDef.php';
+require_once __DIR__ . '/MakeContext.php';
+require_once __DIR__ . '/MakeOptions.php';
+require_once __DIR__ . '/MakeRequest.php';
+require_once __DIR__ . '/MakeResponse.php';
+require_once __DIR__ . '/MakeResult.php';
+require_once __DIR__ . '/MakePoint.php';
+require_once __DIR__ . '/MakeSpec.php';
+require_once __DIR__ . '/MakeUrl.php';
+require_once __DIR__ . '/Param.php';
+require_once __DIR__ . '/PrepareAuth.php';
+require_once __DIR__ . '/PrepareBody.php';
+require_once __DIR__ . '/Graphql.php';
+require_once __DIR__ . '/PrepareHeaders.php';
+require_once __DIR__ . '/PrepareMethod.php';
+require_once __DIR__ . '/PrepareParams.php';
+require_once __DIR__ . '/PreparePath.php';
+require_once __DIR__ . '/PrepareQuery.php';
+require_once __DIR__ . '/ResultBasic.php';
+require_once __DIR__ . '/ResultBody.php';
+require_once __DIR__ . '/ResultHeaders.php';
+require_once __DIR__ . '/TransformRequest.php';
+require_once __DIR__ . '/TransformResponse.php';
+
+TaxCalculationUtility::setRegistrar(function (TaxCalculationUtility $u): void {
+    $u->clean = [TaxCalculationClean::class, 'call'];
+    $u->clean_add = [TaxCalculationClean::class, 'add'];
+    $u->clean_explain = [TaxCalculationDone::class, 'clean_explain'];
+    $u->done = [TaxCalculationDone::class, 'call'];
+    $u->make_error = [TaxCalculationMakeError::class, 'call'];
+    $u->feature_add = [TaxCalculationFeatureAdd::class, 'call'];
+    $u->feature_hook = [TaxCalculationFeatureHook::class, 'call'];
+    $u->feature_init = [TaxCalculationFeatureInit::class, 'call'];
+    $u->fetcher = [TaxCalculationFetcher::class, 'call'];
+    $u->make_fetch_def = [TaxCalculationMakeFetchDef::class, 'call'];
+    $u->make_context = [TaxCalculationMakeContext::class, 'call'];
+    $u->make_options = [TaxCalculationMakeOptions::class, 'call'];
+    $u->make_request = [TaxCalculationMakeRequest::class, 'call'];
+    $u->make_response = [TaxCalculationMakeResponse::class, 'call'];
+    $u->make_result = [TaxCalculationMakeResult::class, 'call'];
+    $u->make_point = [TaxCalculationMakePoint::class, 'call'];
+    $u->make_spec = [TaxCalculationMakeSpec::class, 'call'];
+    $u->make_url = [TaxCalculationMakeUrl::class, 'call'];
+    $u->param = [TaxCalculationParam::class, 'call'];
+    $u->prepare_auth = [TaxCalculationPrepareAuth::class, 'call'];
+    $u->prepare_body = [TaxCalculationPrepareBody::class, 'call'];
+    $u->prepare_headers = [TaxCalculationPrepareHeaders::class, 'call'];
+    $u->prepare_method = [TaxCalculationPrepareMethod::class, 'call'];
+    $u->prepare_params = [TaxCalculationPrepareParams::class, 'call'];
+    $u->prepare_path = [TaxCalculationPreparePath::class, 'call'];
+    $u->prepare_query = [TaxCalculationPrepareQuery::class, 'call'];
+    $u->graphql_body = [TaxCalculationGraphql::class, 'body'];
+    $u->graphql_errors = [TaxCalculationGraphql::class, 'errors'];
+    $u->result_basic = [TaxCalculationResultBasic::class, 'call'];
+    $u->result_body = [TaxCalculationResultBody::class, 'call'];
+    $u->result_headers = [TaxCalculationResultHeaders::class, 'call'];
+    $u->transform_request = [TaxCalculationTransformRequest::class, 'call'];
+    $u->transform_response = [TaxCalculationTransformResponse::class, 'call'];
+});

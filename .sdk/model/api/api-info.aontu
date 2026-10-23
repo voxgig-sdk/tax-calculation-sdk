@@ -1,0 +1,40 @@
+# API Information
+
+
+main: {
+  kit: {
+    info: {
+      auth: false
+      contact: {
+        name: "Pablo Ruiz Quintero"
+        url: "https://estimatetax.net/about/pablo-ruiz-quintero/"
+      }
+      description: `A deterministic calculator for US income tax: federal brackets and FICA, all 50 states
+and the District of Columbia, and local income tax where counties, cities or school
+districts levy one.
+
+No key, no signup, no request body required — a GET with an income and a state code is
+enough. CORS is open, so it can be called from a browser.
+
+Every response carries the document each figure was read from and the date it was
+checked, under \`sources\`. Nothing is estimated or interpolated: a figure either comes
+from a primary source or the endpoint does not return it.`
+      license: {
+        name: "CC BY 4.0"
+        url: "https://creativecommons.org/licenses/by/4.0/"
+      }
+      servers: [
+        {
+          description: "Production"
+          url: "https://estimatetax.net"
+        }
+      ]
+      summary: "US federal, state and local income tax for the 2026 tax year."
+      termsOfService: "https://estimatetax.net/terms/"
+      title: "estimatetax.net Tax Calculation API"
+      version: "1.0.0"
+      website: "https://estimatetax.net/api/"
+    }
+  }
+}
+

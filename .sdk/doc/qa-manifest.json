@@ -1,0 +1,17 @@
+{
+  "files": [
+    "SUMMARY.md"
+  ],
+  "config": ".sdk/doc/qa/vale.ini",
+  "routes": {},
+  "quoted": {
+    "SUMMARY.md": [
+      "> A deterministic calculator for US income tax: federal brackets and FICA, all 50 states\n> and the District of Columbia, and local income tax where counties, cities or school\n> districts levy one.\n>\n> No key, no signup, no request body required, a GET with an income and a state code is\n> enough. CORS is open, so it can be called from a browser.\n>\n> Every response carries the document each figure was read from and the date it was\n> checked, under `sources`. Nothing is estimated or interpolated: a figure either comes\n> from a primary source or the endpoint does not return it.",
+      "Present only where a county, city or school district levies its own.",
+      "Production",
+      "The calculation, with the source of every figure",
+      "The document a figure was read from, and when it was checked.",
+      "Where each layer of the calculation came from."
+    ]
+  }
+}

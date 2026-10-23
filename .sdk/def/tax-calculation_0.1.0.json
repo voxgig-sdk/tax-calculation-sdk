@@ -1,0 +1,534 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "estimatetax.net Tax Calculation API",
+    "version": "1.0.0",
+    "summary": "US federal, state and local income tax for the 2026 tax year.",
+    "description": "A deterministic calculator for US income tax: federal brackets and FICA, all 50 states\nand the District of Columbia, and local income tax where counties, cities or school\ndistricts levy one.\n\nNo key, no signup, no request body required — a GET with an income and a state code is\nenough. CORS is open, so it can be called from a browser.\n\nEvery response carries the document each figure was read from and the date it was\nchecked, under `sources`. Nothing is estimated or interpolated: a figure either comes\nfrom a primary source or the endpoint does not return it.",
+    "contact": {
+      "name": "Pablo Ruiz Quintero",
+      "url": "https://estimatetax.net/about/pablo-ruiz-quintero/"
+    },
+    "license": {
+      "name": "CC BY 4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "termsOfService": "https://estimatetax.net/terms/"
+  },
+  "servers": [
+    {
+      "url": "https://estimatetax.net",
+      "description": "Production"
+    }
+  ],
+  "externalDocs": {
+    "description": "API documentation and limits",
+    "url": "https://estimatetax.net/api/"
+  },
+  "tags": [
+    {
+      "name": "calculation",
+      "description": "Income tax calculation"
+    }
+  ],
+  "paths": {
+    "/api/v1/calculate": {
+      "get": {
+        "tags": [
+          "calculation"
+        ],
+        "operationId": "calculateGet",
+        "summary": "Calculate income tax for one income and place",
+        "description": "Rate limited to 60 requests per minute per IP. No authentication.",
+        "parameters": [
+          {
+            "name": "income",
+            "in": "query",
+            "required": true,
+            "description": "Gross annual employment income, in US dollars.",
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "examples": [
+                100000
+              ]
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "description": "Two-letter state code. Omit for federal only.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "AL",
+                "AK",
+                "AZ",
+                "AR",
+                "CA",
+                "CO",
+                "CT",
+                "DE",
+                "DC",
+                "FL",
+                "GA",
+                "HI",
+                "ID",
+                "IL",
+                "IN",
+                "IA",
+                "KS",
+                "KY",
+                "LA",
+                "ME",
+                "MD",
+                "MA",
+                "MI",
+                "MN",
+                "MS",
+                "MO",
+                "MT",
+                "NE",
+                "NV",
+                "NH",
+                "NJ",
+                "NM",
+                "NY",
+                "NC",
+                "ND",
+                "OH",
+                "OK",
+                "OR",
+                "PA",
+                "RI",
+                "SC",
+                "SD",
+                "TN",
+                "TX",
+                "UT",
+                "VT",
+                "VA",
+                "WA",
+                "WV",
+                "WI",
+                "WY"
+              ]
+            }
+          },
+          {
+            "name": "filingStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "single",
+                "married_jointly",
+                "married_separately",
+                "head_of_household"
+              ],
+              "default": "single"
+            }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "description": "Slug of the county, city or school district that levies a local income tax, for example \"allegany-county\" in MD or \"new-york-city\" in NY. Only meaningful in the eleven states with a local income tax.",
+            "schema": {
+              "type": "string",
+              "examples": [
+                "allegany-county"
+              ]
+            }
+          },
+          {
+            "name": "preTaxDeductions",
+            "in": "query",
+            "required": false,
+            "description": "Pre-tax deductions such as 401(k) or health premiums, in US dollars.",
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "default": 0
+            }
+          },
+          {
+            "name": "selfEmploymentIncome",
+            "in": "query",
+            "required": false,
+            "description": "Net self-employment income, taxed for both halves of FICA.",
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The calculation, with the source of every figure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Calculation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid income, or an unknown state code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "More than 60 requests in a minute from one IP."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "calculation"
+        ],
+        "operationId": "calculatePost",
+        "summary": "Same calculation, with the parameters in a JSON body",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The calculation, with the source of every figure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Calculation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid income, or an unknown state code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Input": {
+        "type": "object",
+        "required": [
+          "income"
+        ],
+        "properties": {
+          "income": {
+            "type": "number",
+            "minimum": 0
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "AL",
+              "AK",
+              "AZ",
+              "AR",
+              "CA",
+              "CO",
+              "CT",
+              "DE",
+              "DC",
+              "FL",
+              "GA",
+              "HI",
+              "ID",
+              "IL",
+              "IN",
+              "IA",
+              "KS",
+              "KY",
+              "LA",
+              "ME",
+              "MD",
+              "MA",
+              "MI",
+              "MN",
+              "MS",
+              "MO",
+              "MT",
+              "NE",
+              "NV",
+              "NH",
+              "NJ",
+              "NM",
+              "NY",
+              "NC",
+              "ND",
+              "OH",
+              "OK",
+              "OR",
+              "PA",
+              "RI",
+              "SC",
+              "SD",
+              "TN",
+              "TX",
+              "UT",
+              "VT",
+              "VA",
+              "WA",
+              "WV",
+              "WI",
+              "WY"
+            ]
+          },
+          "filingStatus": {
+            "type": "string",
+            "enum": [
+              "single",
+              "married_jointly",
+              "married_separately",
+              "head_of_household"
+            ],
+            "default": "single"
+          },
+          "city": {
+            "type": "string"
+          },
+          "preTaxDeductions": {
+            "type": "number",
+            "minimum": 0,
+            "default": 0
+          },
+          "selfEmploymentIncome": {
+            "type": "number",
+            "minimum": 0,
+            "default": 0
+          }
+        }
+      },
+      "Bracket": {
+        "type": "object",
+        "description": "One federal bracket and how much of the taxable income fell in it.",
+        "properties": {
+          "rate": {
+            "type": "number"
+          },
+          "taxableInBracket": {
+            "type": "number"
+          },
+          "tax": {
+            "type": "number"
+          },
+          "min": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          }
+        }
+      },
+      "Source": {
+        "type": "object",
+        "description": "The document a figure was read from, and when it was checked.",
+        "properties": {
+          "citation": {
+            "type": "string"
+          },
+          "authority": {
+            "type": "string"
+          },
+          "document": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "verified": {
+            "type": "string",
+            "format": "date"
+          },
+          "checked": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "Calculation": {
+        "type": "object",
+        "properties": {
+          "taxYear": {
+            "type": "integer",
+            "examples": [
+              2026
+            ]
+          },
+          "input": {
+            "$ref": "#/components/schemas/Input"
+          },
+          "federal": {
+            "type": "object",
+            "properties": {
+              "adjustedGrossIncome": {
+                "type": "number"
+              },
+              "deduction": {
+                "type": "number"
+              },
+              "taxableIncome": {
+                "type": "number"
+              },
+              "incomeTax": {
+                "type": "number"
+              },
+              "socialSecurity": {
+                "type": "number"
+              },
+              "medicare": {
+                "type": "number"
+              },
+              "additionalMedicare": {
+                "type": "number"
+              },
+              "selfEmploymentTax": {
+                "type": "number"
+              },
+              "totalFica": {
+                "type": "number"
+              },
+              "marginalRate": {
+                "type": "number"
+              },
+              "brackets": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Bracket"
+                }
+              }
+            }
+          },
+          "state": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "tax": {
+                "type": "number"
+              },
+              "system": {
+                "type": "string",
+                "enum": [
+                  "graduated",
+                  "flat",
+                  "none"
+                ],
+                "description": "none means the state levies no income tax at all."
+              }
+            }
+          },
+          "local": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Present only where a county, city or school district levies its own.",
+            "properties": {
+              "jurisdiction": {
+                "type": "string"
+              },
+              "tax": {
+                "type": "number"
+              },
+              "rate": {
+                "type": "number"
+              },
+              "base": {
+                "type": "string",
+                "description": "What the local rate applies to: earned income, or state taxable income."
+              }
+            }
+          },
+          "totals": {
+            "type": "object",
+            "properties": {
+              "totalTax": {
+                "type": "number"
+              },
+              "netIncome": {
+                "type": "number"
+              },
+              "effectiveRate": {
+                "type": "number"
+              },
+              "effectiveIncomeTaxRate": {
+                "type": "number"
+              }
+            }
+          },
+          "sources": {
+            "type": "object",
+            "description": "Where each layer of the calculation came from.",
+            "properties": {
+              "federal": {
+                "$ref": "#/components/schemas/Source"
+              },
+              "state": {
+                "$ref": "#/components/schemas/Source"
+              },
+              "local": {
+                "$ref": "#/components/schemas/Source"
+              }
+            }
+          },
+          "disclaimer": {
+            "type": "string"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "x-tax-year": 2026,
+  "x-federal-source": {
+    "citation": "IRS Rev. Proc. 2025-32, § 3.01, Tables 1-4",
+    "verified": "2026-08-31"
+  },
+  "x-jurisdictions": {
+    "states": 51,
+    "note": "50 states and the District of Columbia"
+  }
+}
